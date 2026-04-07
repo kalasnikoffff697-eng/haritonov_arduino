@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 3: Радар Пришельцев</title>
+    
+    <!-- Подключаем внешний CSS -->
+    <link rel="stylesheet" href="style-3.css">
+</head>
+<body>
+
+    <!-- Навигация сверху -->
+    <div class="top-nav">
+        <a href="index.html" class="home-btn">🏠 ГЛАВНАЯ</a>
+    </div>
+
+    <h1 class="typing-header">Урок №3: Сонар — Сканирование пришельцев...</h1>
+    
+    <div class="content-wrapper">
+        <h1>1. Что мы строим?</h1>
+        <h2>Сегодня мы сделаем настоящий **Ультразвуковой Радар**. </h2>
+        <h2>--> Наш датчик будет вращаться на 180 градусов и искать объекты.</h2>
+        <h2>--> Если в радиусе 30 см появится препятствие, мы узнаем об этом через монитор порта (или через зуммер).</h2>
+
+        <h1>2. Компоненты (Материалы)</h1>
+        <ul class="materials-list">
+            <li><b>Датчик HC-SR04</b>: Он посылает ультразвук и ловит эхо.</li>
+            <li><b>Сервопривод SG90</b>: Он будет поворачивать наш датчик.</li>
+            <li><b>Arduino Uno</b>: Мозги нашего радара.</li>
+            <li><b>Провода</b>: Много проводов "папа-папа".</li>
+        </ul>
+
+        <h1>3. Схема сборки</h1>
+        <h2>Закрепи датчик на качалку сервопривода (клеем или скотчем).</h2>
+        <h2>Подключение:</h2>
+        <h2>--> <b>Серво:</b> Оранжевый -> Пин 12, Красный -> 5V, Коричневый -> GND.</h2>
+        <h2>--> <b>Датчик:</b> Trig -> Пин 10, Echo -> Пин 11, VCC -> 5V, GND -> GND.</h2>
+
+        <div class="img-container">
+            <img src="https://i0.wp.com" class="schema-img" alt="Схема радара">
+        </div>
+
+        <h1>4. Код Радара</h1>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode()">Копировать</button>
+            <pre id="radarCode">
+#include &lt;Servo.h&gt;
+
+const int trigPin = 10;
+const int echoPin = 11;
+Servo myServo;
+
+void setup() {
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+  myServo.attach(12);
+}
+
+void loop() {
+  // Вращение от 15 до 165 градусов
+  for(int i=15; i<=165; i++){  
+    myServo.write(i);
+    delay(30);
+    calculateDistance();
+  }
+  // Вращение обратно
+  for(int i=165; i>15; i--){  
+    myServo.write(i);
+    delay(30);
+    calculateDistance();
+  }
+}
+
+void calculateDistance(){
+  digitalWrite(trigPin, LOW); 
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH); 
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  long duration = pulseIn(echoPin, HIGH);
+  int distance = duration*0.034/2;
+  
+  Serial.print("Distance: ");
+  Serial.println(distance);
+}</pre>
+        </div>
+    </div>
+
+    <!-- НАВИГАЦИЯ МЕЖДУ УРОКАМИ -->
+    <div class="nav-container">
+        <a href="less_2.html" class="nav-btn btn-prev">← Назад (VGA Урок)</a>
+        <a href="less_4.html" class="nav-btn btn-next">Следующий урок (Скоро) →</a>
+    </div>
+
+    <script>
+        function copyCode() {
+            const code = document.getElementById('radarCode').innerText;
+            navigator.clipboard.writeText(code);
+            alert('Код радара скопирован!');
+        }
+    </script>
+</body>
+</html>

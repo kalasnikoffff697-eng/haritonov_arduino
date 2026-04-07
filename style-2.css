@@ -1,0 +1,78 @@
+body {
+    background-color: #0d0d0d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    margin: 0;
+}
+
+.top-nav { margin-bottom: 20px; }
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #00ff9d;
+    text-decoration: none;
+    border: 2px solid #00ff9d;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.home-btn:hover { background: #00ff9d; color: #000; box-shadow: 0 0 15px #00ff9d; }
+
+.premium-badge {
+    background: linear-gradient(45deg, #ffd700, #ff8c00);
+    color: #000;
+    display: inline-block;
+    padding: 5px 15px;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.typing-header { color: #fff; font-size: 2.5rem; margin-top: 0; }
+
+.rarity-note {
+    background: #1a1a1a;
+    border-left: 5px solid #ff4500;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+h1 { color: #00ff9d; border-bottom: 1px solid #333; padding-bottom: 10px; }
+h2 { font-weight: normal; color: #bbb; font-size: 1.1rem; }
+
+.code-box {
+    background: #161616;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+}
+
+pre { color: #569cd6; font-family: 'Consolas', monospace; }
+
+.copy-btn {
+    position: absolute; right: 10px; top: 10px;
+    background: #333; color: #00ff9d; border: 1px solid #00ff9d;
+    padding: 5px 10px; cursor: pointer; border-radius: 4px;
+}
+
+.nav-container { display: flex; justify-content: space-between; margin-top: 50px; }
+
+.nav-btn {
+    padding: 15px 25px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.btn-prev { background: #444; }
+.btn-next { background: #007bff; }
+
+.schema-img { max-width: 100%; border: 2px solid #333; margin: 20px 0; }
+
+.palette { list-style: none; padding: 0; }
+.palette b { color: #00ff9d; }

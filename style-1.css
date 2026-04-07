@@ -1,0 +1,62 @@
+body {
+    background-color: #000000;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    margin: 0;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #00ff9d;
+    text-decoration: none;
+    border: 2px solid #00ff9d;
+    font-weight: bold;
+}
+
+.status-bar { color: #444; font-size: 12px; font-family: monospace; }
+.typing-header { color: #fff; font-size: 2.2rem; margin-top: 5px; border-left: 4px solid #00ff9d; padding-left: 15px; }
+
+.rarity-note {
+    border: 1px solid #00ff9d;
+    background: rgba(0, 255, 157, 0.05);
+    padding: 20px;
+    position: relative;
+    margin: 30px 0;
+}
+
+.note-label {
+    position: absolute; top: -12px; left: 15px;
+    background: #00ff9d; color: #000; font-size: 11px; font-weight: bold; padding: 2px 10px;
+}
+
+.code-frame {
+    border: 2px solid #333;
+    margin: 25px 0;
+    background: #050505;
+    box-shadow: 8px 8px 0px #00ff9d;
+}
+
+.code-header {
+    background: #1a1a1a; padding: 10px 15px;
+    display: flex; justify-content: space-between; border-bottom: 1px solid #333;
+}
+
+.code-box { padding: 20px; overflow-x: auto; max-height: 600px; /* Чтобы не был бесконечным */ }
+
+pre { 
+    color: #00ff9d; 
+    font-family: 'Consolas', monospace; 
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.copy-btn {
+    background: transparent; color: #00ff9d; border: 1px solid #00ff9d;
+    padding: 5px 12px; cursor: pointer; font-weight: bold;
+}
+
+.nav-container { display: flex; justify-content: space-between; margin-top: 60px; }
+.nav-btn { text-decoration: none; color: #fff; padding: 12px 25px; border-radius: 5px; font-weight: bold; background: #007bff; }

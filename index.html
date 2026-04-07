@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ULTRA_CORE // OS_v4.0</title>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-green: #39ff14;
+            --neon-red: #ff003c;
+            --bg-dark: #000000;
+            --card-bg: rgba(10, 15, 20, 0.98);
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg-dark);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            overflow: hidden; /* Скролл заблокирован до входа */
+        }
+
+        /* Анимированная полоса сканирования */
+        .scanline {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--neon-blue);
+            opacity: 0.15;
+            box-shadow: 0 0 20px var(--neon-blue);
+            animation: moveScan 4s linear infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        @keyframes moveScan { 0% { top: -5px; } 100% { top: 100%; } }
+
+        .logic-check { display: none; }
+
+        /* ЭКРАН АВТОРИЗАЦИИ */
+        .auth-overlay {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 500;
+            transition: 1s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        /* Улетание экрана вверх при активации чекбокса */
+        #auth-logic:checked ~ .auth-overlay {
+            transform: translateY(-110%);
+            pointer-events: none;
+        }
+
+        .auth-card {
+            border: 1px solid var(--neon-blue);
+            padding: 40px;
+            background: var(--card-bg);
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.15);
+            width: 350px;
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-card::before {
+            content: "SECURE_GATE_V4";
+            position: absolute; top: -10px; left: 20px;
+            background: var(--neon-blue); color: #000;
+            font-size: 10px; padding: 2px 10px; font-weight: bold;
+        }
+
+        .glitch-text { color: var(--neon-blue); letter-spacing: 5px; margin-bottom: 30px; font-size: 22px; }
+
+        .cyber-input {
+            display: block; width: 100%; box-sizing: border-box;
+            margin: 15px 0; background: #050505; border: 1px solid #1a3a5a;
+            padding: 14px; color: var(--neon-blue); outline: none;
+            font-family: monospace; transition: 0.3s;
+        }
+        .cyber-input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+
+        #status-msg { height: 20px; font-size: 11px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ГЛАВНОЕ МЕНЮ */
+        .main-wrapper { padding: 50px; max-width: 1200px; margin: 0 auto; opacity: 0; transition: 1.5s; }
+        #auth-logic:checked ~ .main-wrapper { opacity: 1; }
+
+        .top-header { 
+            border-bottom: 1px solid #1a3a5a; padding-bottom: 20px; 
+            margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .user-info { display: flex; align-items: center; gap: 20px; }
+        .user-tag { color: var(--neon-green); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .balance-tag { color: #ffd700; font-size: 14px; border: 1px solid #ffd700; padding: 2px 12px; border-radius: 2px; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .cyber-card {
+            background: var(--card-bg);
+            border: 1px solid #1a3a5a;
+            border-left: 5px solid var(--neon-blue);
+            padding: 25px;
+            text-decoration: none;
+            color: #fff;
+            transition: 0.4s;
+        }
+
+        .cyber-card:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 242, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
+        }
+
+        .mega-btn, .exit-btn {
+            cursor: pointer; background: transparent;
+            border: 1px solid var(--neon-blue); color: var(--neon-blue);
+            padding: 15px; text-transform: uppercase; font-weight: bold;
+            transition: 0.3s; width: 100%; letter-spacing: 2px;
+        }
+        .mega-btn:hover { background: var(--neon-blue); color: #000; }
+
+        .exit-btn { border-color: var(--neon-red); color: var(--neon-red); width: auto; margin-top: 80px; }
+        .exit-btn:hover { background: var(--neon-red); color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+    
+    <!-- Состояние авторизации -->
+    <input type="checkbox" id="auth-logic" class="logic-check">
+
+    <!-- ОКНО ВХОДА / РЕГИСТРАЦИИ -->
+    <div class="auth-overlay">
+        <div class="auth-card">
+            <h1 class="glitch-text">USER_LINK</h1>
+            <input type="text" id="user-id" placeholder="LOGIN (3-12)" class="cyber-input" maxlength="12">
+            <input type="password" id="user-pass" placeholder="PASS (4-16)" class="cyber-input" maxlength="16">
+            <div id="status-msg"></div>
+            <button id="login-btn" class="mega-btn">INITIALIZE_SESSION</button>
+        </div>
+    </div>
+
+    <!-- КОНТЕНТ ПОСЛЕ ВХОДА -->
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="user-info">
+                <span style="color: var(--neon-blue)">● SYSTEM_ACTIVE</span>
+                <span id="display-name" class="user-tag">GUEST</span>
+                <span id="display-balance" class="balance-tag">0 USD</span>
+            </div>
+            <span style="opacity: 0.4; font-size: 11px; font-family: monospace;">ULTRA_CORE_V4.0_STABLE</span>
+        </header>
+
+        <h2 style="margin-bottom: 35px; letter-spacing: 4px; color: var(--neon-blue)">> SELECT_LEARNING_MODULE_</h2>
+
+        <div class="grid">
+            <a href="less_1.html" class="cyber-card">
+                <h3 style="color:var(--neon-green)">#01 DINO_LOGIC</h3>
+                <p style="opacity: 0.7; font-size: 14px;">Код и физика прыжка. Оригинальный Google Dino для LCD.</p>
+            </a>
+
+            <a href="less_2.html" class="cyber-card">
+                <h3 style="color:var(--neon-green)">#02 VGA_DRIVER</h3>
+                <p style="opacity: 0.7; font-size: 14px;">Генерация аналогового видеосигнала. Вывод графики.</p>
+            </a>
+
+            <a href="file:///C:/Users/user/Desktop/%D0%BD%D0%B5%20%D1%82%D1%80%D0%BE%D0%B3%D0%B0%D1%82%D1%8C/arduino_lesson/less_3_index.html" class="cyber-card">
+                <h3 style="color:var(--neon-green)">#03 RADAR_SCAN</h3>
+                <p style="opacity: 0.7; font-size: 14px;">Работа с ультразвуком и построение карты объектов.</p>
+            </a>
+
+            <a href="less_4.html" class="cyber-card">
+                <h3 style="color:var(--neon-green)">#04 SERIAL_DEBUG</h3>
+                <p style="opacity: 0.7; font-size: 14px;">Перехват логов и отладка систем через монитор порта.</p>
+            </a>
+        </div>
+
+        <button id="logout-btn" class="exit-btn">SHUTDOWN_SYSTEM</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const authCheck = document.getElementById('auth-logic');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const statusMsg = document.getElementById('status-msg');
+            const nameLabel = document.getElementById('display-name');
+            const balanceLabel = document.getElementById('display-balance');
+
+            // 1. АВТО-ВХОД (Проверка сохраненной сессии)
+            const currentSession = localStorage.getItem('active_user');
+            if (currentSession) {
+                const users = JSON.parse(localStorage.getItem('user_database')) || [];
+                const userData = users.find(u => u.name === currentSession);
+                if (userData) {
+                    enterSystem(userData);
+                }
+            }
+
+            // 2. ВХОД И РЕГИСТРАЦИЯ
+            loginBtn.onclick = () => {
+                const login = document.getElementById('user-id').value.trim();
+                const pass = document.getElementById('user-pass').value.trim();
+
+                if (login.length < 3 || pass.length < 4) {
+                    msg("ERR: DATA_TOO_SHORT", "var(--neon-red)");
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('user_database')) || [];
+                const existingUser = users.find(u => u.name.toLowerCase() === login.toLowerCase());
+
+                if (existingUser) {
+                    // ЕСЛИ ЮЗЕР ЕСТЬ - ПРОВЕРЯЕМ ПАРОЛЬ
+                    if (existingUser.password === pass) {
+                        enterSystem(existingUser);
+                    } else {
+                        msg("ERR: ACCESS_DENIED (WRONG_PASS)", "var(--neon-red)");
+                    }
+                } else {
+                    // РЕГИСТРАЦИЯ НОВОГО
+                    const newUser = { 
+                        name: login, 
+                        password: pass, 
+                        balance: 100 // Подарок при регистрации
+                    };
+                    users.push(newUser);
+                    localStorage.setItem('user_database', JSON.stringify(users));
+                    enterSystem(newUser);
+                }
+            };
+
+            function enterSystem(user) {
+                localStorage.setItem('active_user', user.name);
+                nameLabel.innerText = "USER: " + user.name.toUpperCase();
+                balanceLabel.innerText = user.balance + " USD";
+                authCheck.checked = true;
+                document.body.style.overflow = 'auto'; // Разрешаем скролл
+            }
+
+            function msg(text, color) {
+                statusMsg.style.color = color;
+                statusMsg.innerText = text;
+            }
+
+            // 3. ВЫХОД
+            logoutBtn.onclick = () => {
+                localStorage.removeItem('active_user');
+                location.reload();
+            };
+        });
+    </script>
+</body>
+</html>

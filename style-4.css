@@ -1,0 +1,148 @@
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: sans-serif;
+    padding: 20px;
+    margin: 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Кнопка Главная */
+.top-nav {
+    margin-bottom: 30px;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #333;
+    color: #00ff9d; /* Зеленый акцент */
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #00ff9d;
+    transition: 0.3s;
+}
+
+.home-btn:hover {
+    background-color: #00ff9d;
+    color: #121212;
+}
+
+/* Заголовки */
+h1 { 
+    color: #00ff9d; 
+    margin-top: 0;
+}
+
+h2 { 
+    color: #bbb; 
+    font-weight: normal; 
+    border-bottom: 1px solid #333; 
+    padding-bottom: 10px; 
+    margin-top: 40px;
+}
+
+h3 {
+    color: #fff;
+    margin-top: 30px;
+}
+
+p, li {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+ul, ol {
+    color: #ccc;
+    padding-left: 20px;
+}
+
+code {
+    background-color: #333;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #ffeb3b;
+    font-family: monospace;
+}
+
+/* Блок кода */
+.code-box {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    padding: 15px;
+    position: relative;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+pre {
+    color: #dcdcaa;
+    font-family: 'Consolas', 'Monaco', monospace;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre-wrap; /* Перенос строк для мобильных */
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    transition: background 0.2s;
+}
+
+.copy-btn:hover {
+    background: #666;
+}
+
+/* Выделение важных моментов */
+.highlight {
+    color: #ffeb3b;
+    font-weight: bold;
+}
+
+.warning {
+    border-left: 4px solid #ff5252;
+    background: #2a1a1a;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    color: #ffcccc;
+}
+
+/* Кнопка следующий урок */
+.next-lesson-btn {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 15px 30px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #007bff;
+    transition: 0.3s;
+}
+
+.next-lesson-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #333;
+}

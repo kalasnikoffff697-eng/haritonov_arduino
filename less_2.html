@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VGAX Premium Deep Lesson</title>
+    <link rel="stylesheet" href="style-2.css">
+</head>
+<body>
+
+    <!-- Навигация сверху -->
+    <div class="top-nav">
+        <a href="index.html" class="home-btn">🏠 ГЛАВНАЯ</a>
+    </div>
+
+    <div class="premium-badge">Premium Deep Lesson</div>
+    <h1 class="typing-header">Разбираем VGAX: Монитор на Arduino</h1>
+    
+    <div class="rarity-note">
+        <h2>Почему это сложно найти?</h2>
+        <p>Большинство гайдов в сети либо устарели, либо не работают. Библиотека VGAX использует аппаратные прерывания на низком уровне, поэтому малейшая ошибка в схеме или коде приводит к черному экрану. Мы сделаем всё по уму!</p>
+    </div>
+
+    <div class="content">
+        <h1>1. Как VGAX выжимает все соки из Arduino?</h1>
+        <h2>Стандартная Arduino Uno работает на частоте 16 МГц. Чтобы сформировать VGA-сигнал, библиотека использует "ассемблерные вставки" и прерывания по таймеру 2.</h2>
+        <h2>--> <b>Генерация сигнала:</b> Каждую микросекунду контроллер решает, какой уровень напряжения подать на пины цвета. Это огромная нагрузка, поэтому процессор занят на 90% только отрисовкой.</h2>
+        <h2>--> <b>Фреймбуфер:</b> Для хранения картинки 120x60 пикселей требуется 1800 байт (при 2 битах на пиксель). У Uno всего 2048 байт RAM. Это значит, что под твои переменные остается меньше 200 байт!</h2>
+
+        <h1>2. Схема подключения (Нюансы)</h1>
+        <h2>Используй твою схему, но помни про стабильность:</h2>
+        <h2>--> <b>Питание:</b> Если на экране "шум", подключи Arduino к USB-порту компьютера. Дешевые зарядки дают помехи на видеосигнал.</h2>
+        <h2>--> <b>Резисторы:</b> Используем строго 470 Ом. Если соединить напрямую — Arduino может сгореть!</h2>
+
+        <img src="https://arduino-kid.ru" class="schema-img" alt="Схема подключения Arduino к VGA">
+
+        <h1>3. Цветовая палитра</h1>
+        <h2>Индексы цветов для команд:</h2>
+        <ul class="palette">
+            <li><b>0</b> — Черный (пиксель выключен)</li>
+            <li><b>1</b> — Зеленый</li>
+            <li><b>2</b> — Красный</li>
+            <li><b>3</b> — Желтый/Белый</li>
+        </ul>
+
+        <h1>4. Секретный код (Advanced Example)</h1>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode()">Копировать</button>
+            <pre id="vgaCode">
+#include &lt;VGAX.h&gt;
+
+VGAX vga;
+
+void setup() {
+  vga.begin();
+  vga.clear(0); 
+
+  vga.line(0, 0, 119, 0, 1); 
+  vga.line(0, 59, 119, 59, 1); 
+
+  vga.print("PREMIUM MODE", 25, 20, 3); 
+  vga.print("VGAX v1.0", 35, 35, 2); 
+}
+
+void loop() { }
+            </pre>
+        </div>
+
+        <h1>5. Где взять библиотеку?</h1>
+        <h2>Скачивай VGAX с репозитория разработчика (Smaffer) на GitHub и распаковывай в папку <code>libraries</code>.</h2>
+    </div>
+
+    <!-- НАВИГАЦИЯ МЕЖДУ УРОКАМИ -->
+    <div class="nav-container">
+        <a href="less_1.html" class="nav-btn btn-prev">← Назад (Динозаврик)</a>
+        <a href="file:///C:/Users/user/Desktop/%D0%BD%D0%B5%20%D1%82%D1%80%D0%BE%D0%B3%D0%B0%D1%82%D1%8C/arduino_lesson/less_3_index.html" class="nav-btn btn-next">Следующий урок →</a>
+    </div>
+
+    <script>
+        function copyCode() {
+            const code = document.getElementById('vgaCode').innerText;
+            navigator.clipboard.writeText(code);
+            alert('Код скопирован!');
+        }
+    </script>
+</body>
+</html>

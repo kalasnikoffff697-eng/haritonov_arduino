@@ -1,0 +1,67 @@
+body {
+    background-color: #0a0a0a;
+    color: #d0d0d0;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    margin: 0;
+}
+
+.top-nav { margin-bottom: 20px; }
+
+.home-btn {
+    display: inline-block;
+    padding: 10px 25px;
+    color: #00ffcc;
+    text-decoration: none;
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.home-btn:hover { background: #00ffcc; color: #000; box-shadow: 0 0 20px #00ffcc; }
+
+.typing-header {
+    color: #fff;
+    font-size: 2.2rem;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 10px;
+}
+
+h1 { color: #00ffcc; margin-top: 40px; }
+h2 { font-weight: normal; color: #aaa; font-size: 1.1rem; }
+
+.materials-list { list-style: "📡 "; padding-left: 20px; color: #bbb; }
+
+.code-box {
+    background: #111;
+    border: 1px solid #00ffcc44;
+    padding: 20px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 255, 204, 0.05);
+}
+
+pre { color: #00ffcc; font-family: 'Consolas', monospace; white-space: pre-wrap; }
+
+.copy-btn {
+    position: absolute; right: 15px; top: 15px;
+    background: #222; color: #00ffcc; border: 1px solid #00ffcc;
+    padding: 6px 12px; cursor: pointer; border-radius: 5px;
+}
+
+.nav-container { display: flex; justify-content: space-between; margin-top: 60px; }
+
+.nav-btn {
+    padding: 15px 30px;
+    text-decoration: none;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-prev { background: #333; }
+.btn-next { background: #007bff; opacity: 0.7; }
+
+.schema-img { max-width: 100%; border: 2px solid #00ffcc; border-radius: 10px; margin: 20px 0; }

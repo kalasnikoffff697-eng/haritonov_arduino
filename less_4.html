@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок 4: Память EEPROM</title>
+    <!-- Подключение внешнего CSS файла -->
+    <link rel="stylesheet" href="style-4.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Навигация -->
+        <div class="top-nav">
+            <a href="index.html" class="home-btn">← На главную</a>
+        </div>
+
+        <!-- Заголовок урока -->
+        <h1>Урок 4: Память и Настройки (EEPROM)</h1>
+        <p>Научимся сохранять данные так, чтобы они не пропадали после выключения питания.</p>
+
+        <!-- Теория -->
+        <h2>💡 Что такое EEPROM?</h2>
+        <p>Представьте, что у Arduino есть два типа памяти:</p>
+        <ul>
+            <li><strong>Оперативная память (RAM):</strong> Быстрая, но временная. Переменные живут здесь только пока есть питание. Выключили плату — данные стерлись.</li>
+            <li><strong>EEPROM:</strong> Медленнее, но <span class="highlight">постоянная</span>. Это как маленький жесткий диск внутри чипа. Данные хранятся годами даже без батареек.</li>
+        </ul>
+
+        <div class="warning">
+            <strong>⚠️ Важно!</strong><br>
+            Ячейку EEPROM можно перезаписать примерно 100 000 раз. 
+            Нельзя записывать данные в каждом цикле <code>loop()</code> (например, каждую миллисекунду), иначе вы сотрете память за пару дней. 
+            Записывайте только при изменении настроек!
+        </div>
+
+        <!-- Практика -->
+        <h2>🛠 Практика: «Диммер с памятью»</h2>
+        <p>Мы сделаем устройство, которое регулирует яркость светодиода. Если вы выключите Arduino, а потом включите снова — она <strong>вспомнит</strong> последнюю яркость.</p>
+        
+        <h3>Схема подключения:</h3>
+        <ul>
+            <li><strong>Светодиод:</strong> Пин 9 (через резистор 220 Ом).</li>
+            <li><strong>Потенциометр:</strong> Средний пин на A0, боковые на 5V и GND.</li>
+        </ul>
+
+        <h3>Код программы:</h3>
+        <div class="code-box">
+            <button class="copy-btn" onclick="copyCode()">Копировать</button>
+<pre id="arduino-code"><code>#include &lt;EEPROM.h&gt;
+
+// Пины
+const int LED_PIN = 9;
+const int POT_PIN = A0;
+
+// Адрес в EEPROM (ячейка №0)
+const int ADDR_BRIGHTNESS = 0;
+
+int currentBrightness = 0;     // Текущая яркость
+int savedBrightness = 0;       // Яркость из памяти
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  Serial.begin(9600);
+
+  Serial.println("--- Запуск системы ---");
+
+  // 1. ЧТЕНИЕ ИЗ ПАМЯТИ
+  // Считываем байт по адресу 0
+  savedBrightness = EEPROM.read(ADDR_BRIGHTNESS);
+  
+  Serial.print("Прочитано из памяти: ");
+  Serial.println(savedBrightness);
+
+  // Сразу устанавливаем сохраненную яркость
+  analogWrite(LED_PIN, savedBrightness);
+  currentBrightness = savedBrightness;
+}
+
+void loop() {
+  // 2. ЧТЕНИЕ С ПОТЕНЦИОМЕТРА
+  int potValue = analogRead(POT_PIN); 
+  int newBrightness = map(potValue, 0, 1023, 0, 255);
+
+  // 3. ПРОВЕРКА: Записываем ТОЛЬКО если значение изменилось
+  if (newBrightness != currentBrightness) {
+    
+    currentBrightness = newBrightness;
+    
+    // Меняем яркость
+    analogWrite(LED_PIN, currentBrightness);
+    
+    // 4. ЗАПИСЬ В ПАМЯТЬ
+    EEPROM.write(ADDR_BRIGHTNESS, currentBrightness);
+    
+    Serial.print("Новая яркость: ");
+    Serial.println(currentBrightness);
+    
+    delay(100); // Небольшая задержка
+  }
+}</code></pre>
+        </div>
+
+        <h3>Разбор ключевых функций:</h3>
+        <ul>
+            <li><code>EEPROM.read(адрес)</code> — читает число от 0 до 255 из указанной ячейки.</li>
+            <li><code>EEPROM.write(адрес, значение)</code> — записывает число в ячейку.</li>
+            <li><code>if (new != current)</code> — эта проверка спасает память от преждевременного износа.</li>
+        </ul>
+
+        <h2>📝 Домашнее задание</h2>
+        <p>Сделайте <strong>«Счетчик включений»</strong>.</p>
+        <ol>
+            <li>При старте (<code>setup</code>) считывайте число из EEPROM.</li>
+            <li>Прибавляйте к нему единицу (+1).</li>
+            <li>Записывайте новое число обратно.</li>
+            <li>Выводите количество включений в Serial Monitor.</li>
+        </ol>
+        <p><em>Подсказка: Для чисел больше 255 используйте функции <code>EEPROM.put()</code> и <code>EEPROM.get()</code>.</em></p>
+
+        <!-- Кнопка далее -->
+        <div style="text-align: center;">
+            <a href="lesson11.html" class="next-lesson-btn">Следующий урок: Моторы и Реле →</a>
+        </div>
+    </div>
+
+    <script>
+        function copyCode() {
+            const codeText = document.getElementById('arduino-code').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerText = "Скопировано!";
+                setTimeout(() => {
+                    btn.innerText = "Копировать";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

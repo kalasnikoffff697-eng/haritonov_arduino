@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>UNIT_01 // FULL_DINO_CODE</title>
+    <link rel="stylesheet" href="style-1.css">
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="index.html" class="home-btn">← СИСТЕМА_МЕНЮ</a>
+    </nav>
+
+    <header>
+        <div class="status-bar">STATUS: DATA_LOADED // MODULE_01</div>
+        <h1 class="typing-header">> GOOGLE_DINO_ARDUINO</h1>
+        <h2>Полный исходный код игры для LCD 1602 I2C</h2>
+    </header>
+
+    <main>
+        <div class="rarity-note">
+            <div class="note-label">IMPORTANT_NOTICE</div>
+            <strong>ВНИМАНИЕ:</strong> Этот код содержит полную логику генерации препятствий и анимацию спрайтов. Не забудьте подключить кнопку к пину 2 и GND.
+        </div>
+
+        <!-- ОГРОМНАЯ РАМКА С ПОЛНЫМ КОДОМ -->
+        <div class="code-frame">
+            <div class="code-header">
+                <span class="file-name">GOOGLE_DINO_FULL.ino</span>
+                <button class="copy-btn" onclick="copyCode()">COPY_DATA</button>
+            </div>
+            <div class="code-box">
+                <pre id="arduino-code">
+#include &lt;Wire.h&gt;
+#include &lt;LiquidCrystal_I2C.h&gt;
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+
+// Спрайт Динозаврика
+byte dino[8] = { B00111, B00101, B00111, B10110, B11111, B01010, B01010, B00000 };
+// Спрайт Кактуса
+byte cactus[8] = { B00100, B00101, B10101, B10111, B11100, B00100, B00100, B00100 };
+
+int dinoY = 1;          // Позиция Y (0-верх, 1-низ)
+int cactusX = 15;       // Позиция X кактуса
+int score = 0;          // Счет игры
+bool isJumping = false; // Состояние прыжка
+unsigned long timer = 0;
+
+void setup() {
+  lcd.init();
+  lcd.backlight();
+  lcd.createChar(0, dino);
+  lcd.createChar(1, cactus);
+  pinMode(2, INPUT_PULLUP);
+  
+  lcd.setCursor(0, 0);
+  lcd.print("Dino System");
+  lcd.setCursor(0, 1);
+  lcd.print("Initializing...");
+  delay(2000);
+}
+
+void loop() {
+  lcd.clear();
+  
+  // Логика кнопки (Прыжок)
+  if (digitalRead(2) == LOW && !isJumping) {
+    isJumping = true;
+    dinoY = 0;
+    timer = millis();
+  }
+
+  // Возврат на землю через 600мс
+  if (isJumping && millis() - timer > 600) {
+    isJumping = false;
+    dinoY = 1;
+  }
+
+  // Движение препятствия
+  cactusX--;
+  if (cactusX < 0) {
+    cactusX = 15;
+    score++;
+  }
+
+  // Отрисовка счета
+  lcd.setCursor(13, 0);
+  lcd.print(score);
+
+  // Отрисовка героев
+  lcd.setCursor(2, dinoY);
+  lcd.write(byte(0)); // Дино
+  
+  lcd.setCursor(cactusX, 1);
+  lcd.write(byte(1)); // Кактус
+
+  // Проверка на столкновение
+  if (cactusX == 2 && dinoY == 1) {
+    lcd.clear();
+    lcd.setCursor(3, 0);
+    lcd.print("GAME OVER!");
+    lcd.setCursor(4, 1);
+    lcd.print("Score: ");
+    lcd.print(score);
+    while(digitalRead(2) == HIGH); // Ждем нажатия для рестарта
+    score = 0;
+    cactusX = 15;
+    delay(500);
+  }
+
+  delay(150); // Скорость игры
+}
+                </pre>
+            </div>
+        </div>
+
+        <div class="nav-container">
+            <span></span>
+            <a href="file:///C:/Users/user/Desktop/%D0%BD%D0%B5%20%D1%82%D1%80%D0%BE%D0%B3%D0%B0%D1%82%D1%8C/arduino_lesson/less_2.html" class="nav-btn btn-next">СЛЕДУЮЩИЙ МОДУЛЬ →</a>
+        </div>
+    </main>
+
+    <script src="../java-l1.js"></script>
+</body>
+</html>
